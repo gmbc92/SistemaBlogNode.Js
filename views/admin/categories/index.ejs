@@ -1,0 +1,50 @@
+<%- include ("../../partials/header.ejs") %>
+<%- include ("../../partials/navbar.ejs") %>
+
+<div class="container">
+    <hr>
+    <h2>Categorias</h2>
+    <a class="btn btn-success" href="/admin/categories/new">Criar Nova Categoria</a>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Título</th>
+                <th>Slug</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+        <% categories.forEach((category) => { %>
+            <tr>
+                <th><%=category.id%></th>
+                <th><%=category.title%></th>
+                <th><%=category.slug%></th>
+                <th>
+                <a href="/admin/categories/edit/<%= category.id %>" class="btn btn-warning">Editar</a>   <!-- troca-se o button pela tag a para encaminhar para outra pagina -->
+                <form action="/categories/delete" method="POST" style="display: inline" onsubmit="confirmarDelecao(event, this)"> <!--action redireciona para uma pagina, metodo post para formularios, funcao passando o evento e o formulario em si! -->
+                    <input type="hidden" name="id" value="<%= category.id %>">
+                    <button class="btn btn-danger">Deletar</button>
+                </form>
+                </th>
+            </tr>
+        <% });  %>
+        </tbody>
+    </table>
+</div>
+<%- include ("../../partials/footer.ejs") %>
+<script>
+
+function confirmarDelecao(event, form){ 
+    // event é uma variavel de action do DOM
+    event.preventDefault(); //depura a decisao de aceitação de delecao e envia o formulario para o banco
+    var decisao = confirm("Deseja deletar esta categoria?");
+    if(decisao){
+        console.log("Opção deletar escolhida");
+        form.submit();
+    }else{
+        console.log("Opção de deletar cancelada")
+    }
+}
+</script>
